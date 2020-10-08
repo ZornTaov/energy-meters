@@ -1,6 +1,7 @@
 package com.vladmarica.energymeters;
 
 import com.vladmarica.energymeters.client.ClientProxy;
+import com.vladmarica.energymeters.datagen.DataGenerators;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,6 +45,7 @@ public class EnergyMetersMod {
   public EnergyMetersMod() {
 
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitEvent);
+    //FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGenerators::gatherData);
     //Registration.init();
   }
 

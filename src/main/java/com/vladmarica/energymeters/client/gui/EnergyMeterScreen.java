@@ -10,6 +10,10 @@ import com.vladmarica.energymeters.block.BlockEnergyMeter;
 import com.vladmarica.energymeters.block.BlockEnergyMeter.MeterType;
 import com.vladmarica.energymeters.client.Sprites;
 import com.vladmarica.energymeters.client.model.TextureLocations;
+import com.vladmarica.energymeters.energy.EnergyType;
+import com.vladmarica.energymeters.network.PacketUpdateMeterConfig;
+import com.vladmarica.energymeters.network.PacketUpdateMeterSides;
+import com.vladmarica.energymeters.network.PacketUpdateRateLimit;
 import com.vladmarica.energymeters.tile.TileEntityEnergyMeterBase;
 import com.vladmarica.energymeters.tile.config.EnumRedstoneControlState;
 import java.text.NumberFormat;
@@ -19,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
@@ -26,6 +31,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -204,58 +210,58 @@ public class EnergyMeterScreen extends Screen implements IPressable {
 
 
   @Override
-  public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-    /*this.renderBackground();
+  public void render(MatrixStack mx, int mouseX, int mouseY, float partialTicks) {
+    this.renderBackground(mx);
 
 
     int x = (this.width - TEXTURE_WIDTH) / 2;
     int y = (this.height - TEXTURE_HEIGHT) / 2;
 
     this.getMinecraft().getTextureManager().bindTexture(BACKGROUND_TEXTURE);
-    this.blit(x, y, 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+    this.blit(mx, x, y, 0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
     int titleWidth = this.font.getStringWidth("Energy Meter");
     int titleX = (TEXTURE_WIDTH - titleWidth) / 2;
-    this.font.drawString("Energy Meter", x + titleX, y + 7, COLOR_GREY);
+    this.font.drawString(mx, "Energy Meter", x + titleX, y + 7, COLOR_GREY);
 
     int leftPanelOffset = 18;
     int statYIncr = 28;
     int statY = y + 28;
 
     String units = this.tile.getEnergyAlias().getDisplayName();
-    this.font.drawString(TextFormatting.GRAY + "Transfer Rate", x  + leftPanelOffset, statY, COLOR_WHITE);
-    this.font.drawString(RATE_FORMAT.format(tile.getTransferRate() / tile.getEnergyScale()) + " " + units + "/t", x  + leftPanelOffset, statY + 11, COLOR_WHITE);
+    this.font.drawString(mx, TextFormatting.GRAY + "Transfer Rate", x  + leftPanelOffset, statY, COLOR_WHITE);
+    this.font.drawString(mx, RATE_FORMAT.format(tile.getTransferRate() / tile.getEnergyScale()) + " " + units + "/t", x  + leftPanelOffset, statY + 11, COLOR_WHITE);
     statY += statYIncr;
 
-    this.font.drawString(TextFormatting.GRAY + "Transfer Rate Limit", x  + leftPanelOffset, statY, COLOR_WHITE);
+    this.font.drawString(mx, TextFormatting.GRAY + "Transfer Rate Limit", x  + leftPanelOffset, statY, COLOR_WHITE);
     if (!this.isEditingLimit) {
-      this.font.drawString(getRateLimitString() + " " + units + "/t", x + leftPanelOffset, statY + 11, COLOR_WHITE);
+      this.font.drawString(mx, getRateLimitString() + " " + units + "/t", x + leftPanelOffset, statY + 11, COLOR_WHITE);
     }
     statY += statYIncr;
 
-    this.font.drawString(TextFormatting.GRAY + "Total Transferred", x  + leftPanelOffset, statY, COLOR_WHITE);
-    this.font.drawString(TOTAL_FORMAT.format(tile.getTotalEnergyTransferred() / tile.getEnergyScale()) + " " + units, x  + leftPanelOffset, statY + 11, COLOR_WHITE);
+    this.font.drawString(mx, TextFormatting.GRAY + "Total Transferred", x  + leftPanelOffset, statY, COLOR_WHITE);
+    this.font.drawString(mx, TOTAL_FORMAT.format(tile.getTotalEnergyTransferred() / tile.getEnergyScale()) + " " + units, x  + leftPanelOffset, statY + 11, COLOR_WHITE);
     statY += statYIncr;
 
-    this.font.drawString(TextFormatting.GRAY + "Status", x  + leftPanelOffset, statY, COLOR_WHITE);
-    this.font.drawString(getStatusString(), x  + leftPanelOffset, statY + 11, COLOR_WHITE);
+    this.font.drawString(mx, TextFormatting.GRAY + "Status", x  + leftPanelOffset, statY, COLOR_WHITE);
+    this.font.drawString(mx, getStatusString(), x  + leftPanelOffset, statY + 11, COLOR_WHITE);
 
     this.updateConfigButtonTextures();
     for (GuiButtonSideConfig sideConfigButton : this.sideToButtonMap.values()) {
       GlStateManager.color4f(1, 1, 1, 1);
-      sideConfigButton.render(mouseX, mouseY, partialTicks);
+      sideConfigButton.render(mx, mouseX, mouseY, partialTicks);
     }
 
-    this.rateLimitTextField.render(mouseX, mouseY, partialTicks);
+    this.rateLimitTextField.render(mx, mouseX, mouseY, partialTicks);
     if (this.isEditingLimit) {
-      this.font.drawString(
-          this.energyAliasButton.getAlias().getDisplayName() + "/t",
+      this.font.drawString(mx,
+              this.energyAliasButton.getAlias().getDisplayName() + "/t",
           rateLimitTextField.x + rateLimitTextField.getWidth() + 4,
           rateLimitTextField.y + 2,
           COLOR_WHITE);
     }
 
-    super.render(mouseX, mouseY, partialTicks);
+    super.render(mx, mouseX, mouseY, partialTicks);
 
     for (GuiButtonSideConfig sideConfigButton : this.sideToButtonMap.values()) {
       if (sideConfigButton.isMouseHovered()) {
@@ -270,14 +276,14 @@ public class EnergyMeterScreen extends Screen implements IPressable {
         if (this.sideToFaceMap.get(sideConfigButton.getSide()) == tile.getOutputSide()) {
           lines.add(TextFormatting.GRAY + "Output");
         }
-        this.renderTooltip(lines, mouseX, mouseY);
+        //this.renderTooltip(mx, lines, mouseX, mouseY);
         break;
       }
     }
 
     for (Widget button : this.buttons) {
       if (button instanceof IHasTooltip && button.isMouseOver(mouseX, mouseY)) {
-        this.renderTooltip(((IHasTooltip) button).getTooltipLines(), mouseX, mouseY);
+        //this.renderTooltip(mx, ((IHasTooltip) button).getTooltipLines(), mouseX, mouseY);
       }
     }
 
@@ -290,8 +296,8 @@ public class EnergyMeterScreen extends Screen implements IPressable {
         lines.add(TextFormatting.RED + this.tile.getEnergyType().getName() + " meters cannot be limited");
       }
 
-      this.renderTooltip(lines,  mouseX, mouseY);
-    }*/
+      //this.renderTooltip(lines,  mouseX, mouseY);
+    }
   }
 
   @Override
@@ -303,6 +309,92 @@ public class EnergyMeterScreen extends Screen implements IPressable {
   @Override
   public void onPress(Button button) {
 
+    boolean sendUpdatePacket = false;
+
+    if (button == this.redstoneControlButton) {
+      EnumRedstoneControlState newState = this.redstoneControlButton.cycle();
+      this.tile.setRedstoneControlState(newState);
+      sendUpdatePacket = true;
+    }
+
+    if (button == this.energyAliasButton) {
+      EnergyType.EnergyAlias newAlias = this.energyAliasButton.cycle();
+      this.tile.setEnergyAlias(newAlias);
+      sendUpdatePacket = true;
+    }
+
+    if (sendUpdatePacket) {
+      EnergyMetersMod.NETWORK.sendToServer(
+              new PacketUpdateMeterConfig(
+                      this.tile.getPos(),
+                      this.tile.getRedstoneControlState(),
+                      this.tile.getEnergyAlias().getIndex()));
+    }
+  }
+
+  @Override
+  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    // Left click
+    if (mouseButton == 0) {
+      for (GuiButtonSideConfig button : this.sideToButtonMap.values()) {
+        if (!button.isDisabled() && button.isMouseHovered()) {
+          this.sideConfigButtonClicked(button);
+          break;
+        }
+      }
+      if (this.energyAliasButton.isMouseOver(mouseX, mouseY)) this.energyAliasButton.onClick(mouseX, mouseY);
+      if (this.redstoneControlButton.isMouseOver(mouseX, mouseY)) this.redstoneControlButton.onClick(mouseX, mouseY);
+      if (this.setRateLimitButton.isMouseOver(mouseX, mouseY) && this.setRateLimitButton.visible && this.tile.getEnergyType().isLimitable() && this.isEditingLimit) {
+        String str = this.rateLimitTextField.getText();
+        if (Util.isValidRateLimitString(str)) {
+          int rateLimit;
+          if (str.isEmpty()) {
+            rateLimit = TileEntityEnergyMeterBase.UNLIMITED_RATE;
+          } else {
+            rateLimit = Integer.parseInt(str);
+          }
+
+          this.isEditingLimit = false;
+          this.tile.setRateLimit(rateLimit);
+          EnergyMetersMod.NETWORK.sendToServer(new PacketUpdateRateLimit(this.tile.getPos(), rateLimit));
+        }
+      }
+
+      if (this.rateLimitButton.isMouseOver(mouseX, mouseY) && this.tile.getEnergyType().isLimitable() && !this.isEditingLimit) {
+        this.isEditingLimit = true;
+        this.rateLimitTextField.setText(
+                this.tile.getRateLimit() == TileEntityEnergyMeterBase.UNLIMITED_RATE
+                        ? ""
+                        : Integer.toString(this.tile.getRateLimit()));
+      }
+
+      this.rateLimitTextField.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    return super.mouseClicked(mouseX, mouseY, mouseButton);
+  }
+  private void sideConfigButtonClicked(GuiButtonSideConfig button) {
+    this.minecraft.getSoundHandler().play(
+            SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+
+    Direction face = this.sideToFaceMap.get(button.getSide());
+    if (face == this.tile.getInputSide()) {
+      this.tile.setOutputSide(face);
+      this.tile.setInputSide(null);
+    } else if (face == this.tile.getOutputSide()) {
+      this.tile.setOutputSide(null);
+    } else {
+      if (this.tile.getInputSide() != null && this.tile.getOutputSide() == null) {
+        this.tile.setOutputSide(face);
+      } else {
+        this.tile.setInputSide(face);
+      }
+    }
+
+    EnergyMetersMod.NETWORK.sendToServer(new PacketUpdateMeterSides(
+            this.tile.getPos(),
+            this.tile.getInputSide(),
+            this.tile.getOutputSide()));
   }
 
   @Override

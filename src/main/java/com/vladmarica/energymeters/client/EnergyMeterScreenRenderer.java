@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
@@ -21,16 +23,16 @@ public class EnergyMeterScreenRenderer extends TileEntityRenderer<TileEntityEner
   private static final int WHITE = 0xFFFFFF;
   private static final String DISABLED_TEXT = TextFormatting.RED + "DISABLED";
 
-  private static final int disabledTextWidth = -1;
+  private static int disabledTextWidth = -1;
 
   public EnergyMeterScreenRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
     super(rendererDispatcherIn);
   }
 
   @Override
-  public void render(TileEntityEnergyMeterBase tile, float partialTicks, MatrixStack matrixStackIn,
+  public void render(TileEntityEnergyMeterBase tile, float partialTicks, MatrixStack mx,
                      IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-    /*super.render(tile, x, y, z, partialTicks, destroyStage);
+    //super.render(tile, x, y, z, partialTicks, destroyStage);
 
 
     // The screen is "off" if the meter is not fully connected
@@ -39,32 +41,35 @@ public class EnergyMeterScreenRenderer extends TileEntityRenderer<TileEntityEner
     }
 
     if (disabledTextWidth == -1) {
-      disabledTextWidth = this.getFontRenderer().getStringWidth(DISABLED_TEXT);
+      disabledTextWidth = this.renderDispatcher.getFontRenderer().getStringWidth(DISABLED_TEXT);
     }
 
-    GlStateManager.pushMatrix();
+    mx.push();
+    BlockPos pos = tile.getPos();
+    double x = pos.getX();
+    double y = pos.getY();
+    double z = pos.getZ();
+    mx.translate(x + 0.5, y + 1, z + 0.5);
+    mx.rotate(new Quaternion(FACE_TO_ANGLE[tile.getScreenSide().getIndex()], 0, 1, 0));
+    mx.translate(-0.5, 0, 0.5 + 0.001);
 
-    GlStateManager.translated(x + 0.5, y + 1, z + 0.5);
-    GlStateManager.rotated(FACE_TO_ANGLE[tile.getScreenSide().getIndex()], 0, 1, 0);
-    GlStateManager.translated(-0.5, 0, 0.5 + 0.001);
+    mx.translate(PIXEL_WIDTH * 2, -PIXEL_WIDTH * 2, 0);
 
-    GlStateManager.translated(PIXEL_WIDTH * 2, -PIXEL_WIDTH * 2, 0);
-
-    GlStateManager.normal3f(1.0F, 1.0F, 1.0F);
-    GlStateManager.scalef(0.015F, -0.015F, 0.015F);
+    //mx.normal3f(1.0F, 1.0F, 1.0F);
+    mx.scale(0.015F, -0.015F, 0.015F);
     GlStateManager.disableLighting();
     GlStateManager.enableDepthTest();
-    this.setLightmapDisabled(true);
+    //this.renderDispatcher.setLightmapDisabled(true);
 
 
     GlStateManager.enableBlend();
     GlStateManager.blendFuncSeparate(
-        GlStateManager.SourceFactor.SRC_ALPHA,
-        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-        GlStateManager.SourceFactor.ONE,
-        GlStateManager.DestFactor.ZERO);
+        GlStateManager.SourceFactor.SRC_ALPHA.param,
+        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.param,
+        GlStateManager.SourceFactor.ONE.param,
+        GlStateManager.DestFactor.ZERO.param);
 
-    FontRenderer fontRenderer = this.getFontRenderer();
+    FontRenderer fontRenderer = this.renderDispatcher.getFontRenderer();
     GL11.glColor4f(0.9F, 0.9F, 0.9F, 1F);
 
     if (DRAW_DEBUG_SQUARE) {
@@ -79,23 +84,23 @@ public class EnergyMeterScreenRenderer extends TileEntityRenderer<TileEntityEner
     }
 
     if (tile.isDisabled()) {
-      fontRenderer.drawString(DISABLED_TEXT, (SCREEN_SIZE - disabledTextWidth) / 2.0F, 20, WHITE);
+      fontRenderer.drawString(mx, DISABLED_TEXT, (SCREEN_SIZE - disabledTextWidth) / 2.0F, 20, WHITE);
     } else {
       String displayText = formatRate(tile.getTransferRate() / (float) tile.getEnergyScale());
       int displayTextWidth = fontRenderer.getStringWidth(displayText);
-      fontRenderer.drawString(
+      fontRenderer.drawString(mx,
           TextFormatting.WHITE + displayText,
           (SCREEN_SIZE - displayTextWidth) / 2.0F, 15, WHITE);
-      fontRenderer.drawString(
+      fontRenderer.drawString(mx,
           TextFormatting.WHITE + tile.getEnergyAlias().getDisplayName() + "/t",
           (SCREEN_SIZE - 22) / 2.0F, 25, WHITE);
     }
 
-    this.setLightmapDisabled(false);
+    //this.setLightmapDisabled(false);
     GlStateManager.enableLighting();
     GlStateManager.disableBlend();
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    GlStateManager.popMatrix();*/
+    mx.pop();
   }
 
   private static String formatRate(float rate) {
