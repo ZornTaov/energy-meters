@@ -1,29 +1,36 @@
 package com.vladmarica.energymeters.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.vladmarica.energymeters.tile.TileEntityEnergyMeterBase;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 public class EnergyMeterScreenRenderer extends TileEntityRenderer<TileEntityEnergyMeterBase> {
   private static final float PIXEL_WIDTH = 1 / 16F;
-  private static float[] FACE_TO_ANGLE = {0, 0, 180, 0, -90, 90};
+  private static final float[] FACE_TO_ANGLE = {0, 0, 180, 0, -90, 90};
   private static final int SCREEN_SIZE = 50;
-  private static boolean DRAW_DEBUG_SQUARE = false;
+  private static final boolean DRAW_DEBUG_SQUARE = false;
   private static final int WHITE = 0xFFFFFF;
   private static final String DISABLED_TEXT = TextFormatting.RED + "DISABLED";
 
-  private static int disabledTextWidth = -1;
+  private static final int disabledTextWidth = -1;
+
+  public EnergyMeterScreenRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+    super(rendererDispatcherIn);
+  }
 
   @Override
-  public void render(TileEntityEnergyMeterBase tile,  double x, double y, double z,
-      float partialTicks, int destroyStage) {
-    super.render(tile, x, y, z, partialTicks, destroyStage);
+  public void render(TileEntityEnergyMeterBase tile, float partialTicks, MatrixStack matrixStackIn,
+                     IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    /*super.render(tile, x, y, z, partialTicks, destroyStage);
 
 
     // The screen is "off" if the meter is not fully connected
@@ -88,7 +95,7 @@ public class EnergyMeterScreenRenderer extends TileEntityRenderer<TileEntityEner
     GlStateManager.enableLighting();
     GlStateManager.disableBlend();
     GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    GlStateManager.popMatrix();
+    GlStateManager.popMatrix();*/
   }
 
   private static String formatRate(float rate) {

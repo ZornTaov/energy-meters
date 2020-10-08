@@ -14,7 +14,7 @@ public class TextureLocations {
 
   static {
     for (MeterType meterType : MeterType.values()) {
-      String suffix = meterType != MeterType.FE_METER ? "_" + meterType.getName() : "";
+      String suffix = meterType != MeterType.FE_METER ? "_" + meterType.getString() : "";
       SIDE_TEXTURES.put(meterType, new ResourceLocation(EnergyMetersMod.MODID, "block/meter" + suffix));
       INPUT_TEXTURES.put(meterType, new ResourceLocation(
           EnergyMetersMod.MODID, "block/meter_input" + suffix));

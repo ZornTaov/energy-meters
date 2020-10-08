@@ -1,5 +1,6 @@
 package com.vladmarica.energymeters.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 
@@ -20,8 +21,8 @@ public class Sprite {
     this.textureY = this.index / SPRITEMAP_SIZE * DEFAULT_HEIGHT;
   }
 
-  public void render(Screen gui, int x, int y) {
+  public void render(MatrixStack matrixStack, Screen gui, int x, int y) {
     gui.getMinecraft().getTextureManager().bindTexture(this.texture);
-    gui.blit(x, y, textureX, textureY, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    gui.blit(matrixStack, x, y, textureX, textureY, DEFAULT_WIDTH, DEFAULT_HEIGHT);
   }
 }

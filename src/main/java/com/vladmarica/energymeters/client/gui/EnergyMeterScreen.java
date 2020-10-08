@@ -2,6 +2,7 @@ package com.vladmarica.energymeters.client.gui;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.vladmarica.energymeters.EnergyMetersMod;
 import com.vladmarica.energymeters.Util;
@@ -29,7 +30,8 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+//import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 @OnlyIn(Dist.CLIENT)
 public class EnergyMeterScreen extends Screen implements IPressable {
@@ -139,10 +141,10 @@ public class EnergyMeterScreen extends Screen implements IPressable {
 
     this.updateConfigButtonTextures();
 
-    this.rateLimitTextField = new TextFieldWidget(this.font, x + 18, y + 67, 70, 12, "");
+    this.rateLimitTextField = new TextFieldWidget(this.font, x + 18, y + 67, 70, 12, StringTextComponent.EMPTY);
     this.rateLimitTextField.setValidator(Util::isValidRateLimitString);
     this.rateLimitTextField.setVisible(false);
-    this.buttons.add(this.setRateLimitButton = new GuiButtonExt(x + 117, y + 65, 25, 16, "Set", this));
+    this.buttons.add(this.setRateLimitButton = new ExtendedButton(x + 117, y + 65, 25, 16, new StringTextComponent("Set"), this));
     this.setRateLimitButton.visible = false;
 
     // Disable rate limit button if the energy type is not limitable
@@ -200,9 +202,10 @@ public class EnergyMeterScreen extends Screen implements IPressable {
         : Integer.toString(this.tile.getRateLimit());
   }
 
+
   @Override
-  public void render(int mouseX, int mouseY, float partialTicks) {
-    this.renderBackground();
+  public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    /*this.renderBackground();
 
 
     int x = (this.width - TEXTURE_WIDTH) / 2;
@@ -288,7 +291,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
       }
 
       this.renderTooltip(lines,  mouseX, mouseY);
-    }
+    }*/
   }
 
   @Override

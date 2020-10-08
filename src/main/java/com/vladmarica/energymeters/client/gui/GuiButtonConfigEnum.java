@@ -3,13 +3,14 @@ package com.vladmarica.energymeters.client.gui;
 import com.google.common.collect.ImmutableList;
 import com.vladmarica.energymeters.tile.config.IConfigEnum;
 import java.util.List;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class GuiButtonConfigEnum<T extends Enum<T> & IConfigEnum> extends GuiIconButton implements
     IHasTooltip {
   private T value;
-  private List<T> possibleValues;
-  private String title;
+  private final List<T> possibleValues;
+  private final String title;
 
   public GuiButtonConfigEnum(String title, int x, int y, Class<T> enumClass, T value, IPressable onPress) {
     super(x, y, null, onPress);
@@ -18,7 +19,7 @@ public class GuiButtonConfigEnum<T extends Enum<T> & IConfigEnum> extends GuiIco
     this.title = title;
 
     if (this.value.getIcon() == null) {
-      this.setMessage(this.value.getDisplayName());
+      this.setMessage(new StringTextComponent(this.value.getDisplayName()));
     }
 
     this.setIcon(this.value.getIcon());
@@ -27,7 +28,7 @@ public class GuiButtonConfigEnum<T extends Enum<T> & IConfigEnum> extends GuiIco
   public T cycle() {
     int newOrdinal = (value.ordinal() + 1) % possibleValues.size();
     this.value = possibleValues.get(newOrdinal);
-    this.setMessage(this.value.getIcon() == null ? this.value.getDisplayName() : "");
+    this.setMessage(this.value.getIcon() == null ? new StringTextComponent(this.value.getDisplayName()) : StringTextComponent.EMPTY);
     this.setIcon(this.value.getIcon());
     return this.value;
   }

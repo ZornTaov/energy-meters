@@ -4,7 +4,7 @@ import com.vladmarica.energymeters.EnergyMetersMod;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.BakedQuadRetextured;
+import com.vladmarica.energymeters.client.model.BakedQuadRetextured;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -22,12 +22,12 @@ public class TexturedQuadCache {
   public BakedQuadRetextured getBakedQuad(Direction side, ResourceLocation texture) {
     // Check cache first
     if (this.texturedQuadCache.get(side).containsKey(texture)) {
-      EnergyMetersMod.LOGGER.debug("TexturedQuadCache hit for {}-{}", side.getName(), texture);
+      EnergyMetersMod.LOGGER.debug("TexturedQuadCache hit for {}-{}", side.getName2(), texture);
       return this.texturedQuadCache.get(side).get(texture);
     }
 
     // In the cache of cache miss, build and store the requested retextured quad
-    EnergyMetersMod.LOGGER.debug("TexturedQuadCache miss for {}-{}", side.getName(), texture);
+    EnergyMetersMod.LOGGER.debug("TexturedQuadCache miss for {}-{}", side.getName2(), texture);
 
     BakedQuadRetextured retexturedQuad = buildRetexturedQuad(side, texture);
     this.texturedQuadCache.get(side).put(texture, retexturedQuad);

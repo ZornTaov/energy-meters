@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
@@ -24,7 +24,7 @@ public class EnergyMeterBakedModel implements IDynamicBakedModel {
   public static final ModelProperty<Direction> MODEL_PROP_INPUT_SIDE = new ModelProperty<>();
   public static final ModelProperty<Direction> MODEL_PROP_OUTPUT_SIDE = new ModelProperty<>();
 
-  private IBakedModel originalModel;
+  private final IBakedModel originalModel;
 
   public EnergyMeterBakedModel(IBakedModel originalModel) {
     this.originalModel = originalModel;
@@ -32,7 +32,7 @@ public class EnergyMeterBakedModel implements IDynamicBakedModel {
 
   @Nonnull
   @Override
-  public IModelData getModelData(@Nonnull IEnviromentBlockReader world, @Nonnull BlockPos pos,
+  public IModelData getModelData(@Nonnull IBlockDisplayReader world, @Nonnull BlockPos pos,
       @Nonnull BlockState state, @Nonnull IModelData modelData) {
     //modelData.setData(MODEL_PROP_INPUT_SIDE, Direction.DOWN);
     //modelData.setData(MODEL_PROP_OUTPUT_SIDE, Direction.UP);
@@ -89,15 +89,22 @@ public class EnergyMeterBakedModel implements IDynamicBakedModel {
   }
 
   @Override
+  public boolean isSideLit() {
+    return false;
+  }
+
+  @Override
   public boolean isBuiltInRenderer() {
     return false;
   }
 
+  @Nonnull
   @Override
   public TextureAtlasSprite getParticleTexture() {
     return this.originalModel.getParticleTexture(EmptyModelData.INSTANCE);
   }
 
+  @Nullable
   @Override
   public ItemOverrideList getOverrides() {
     return null;

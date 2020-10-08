@@ -114,8 +114,8 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
   }
 
   @Override
-  public void read(CompoundNBT tag) {
-    super.read(tag);
+  public void read(BlockState state, CompoundNBT tag) {
+    super.read(state, tag);
     this.inputSide = BufferUtil.decodeNullableFace(tag.getByte(NBT_INPUT_SIDE_KEY));
     this.outputSide = BufferUtil.decodeNullableFace(tag.getByte(NBT_OUTPUT_SIDE_KEY));
     this.totalEnergyTransferred = tag.getLong(NBT_TOTAL_ENERGY_TRANSFERRED_KEY);
@@ -154,7 +154,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
   }
 
   @Override
-  public void handleUpdateTag(CompoundNBT tag) {
+  public void handleUpdateTag(BlockState state, CompoundNBT tag) {
     this.fullyConnected = tag.getBoolean(NBT_CONNECTED_KEY);
     this.powered = tag.getBoolean(NBT_POWERED_KEY);
     this.inputSide = BufferUtil.decodeNullableFace(tag.getByte(NBT_INPUT_SIDE_KEY));
@@ -184,7 +184,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
    */
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet){
-    this.handleUpdateTag(packet.getNbtCompound());
+    this.handleUpdateTag(this.world.getBlockState(pos), packet.getNbtCompound());
     // this.getWorld().markBlockRangeForRenderUpdate(this.pos, this.pos);
   }
 
@@ -219,7 +219,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
       this.onFirstTick();
     }
 
-    if (this.world.isRemote) {
+    if (this.world != null && this.world.isRemote) {
       return;
     }
 

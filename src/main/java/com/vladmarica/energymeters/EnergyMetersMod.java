@@ -1,7 +1,6 @@
 package com.vladmarica.energymeters;
 
 import com.vladmarica.energymeters.client.ClientProxy;
-import java.util.function.Supplier;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,17 +32,19 @@ public class EnergyMetersMod {
       NETWORK_CHANNEL_VERSION::equals,
       NETWORK_CHANNEL_VERSION::equals);
 
-  public static CommonProxy proxy = DistExecutor.runForDist(
-      () -> getClientProxy(),
-      () -> () -> new CommonProxy());
+  public static CommonProxy proxy = DistExecutor.safeRunForDist(
+          EnergyMetersMod::getClientProxy,
+      () -> CommonProxy::new);
 
   @OnlyIn(Dist.CLIENT)
-  private static Supplier<CommonProxy> getClientProxy() {
+  private static DistExecutor.SafeSupplier<CommonProxy> getClientProxy() {
     return ClientProxy::new;
   }
 
   public EnergyMetersMod() {
+
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInitEvent);
+    //Registration.init();
   }
 
   public void onInitEvent(final FMLCommonSetupEvent event) {
