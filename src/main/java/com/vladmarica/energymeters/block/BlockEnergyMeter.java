@@ -35,9 +35,9 @@ public class BlockEnergyMeter extends Block {
 
   public static final DirectionProperty PROP_FACING = DirectionProperty.create("facing", Plane.HORIZONTAL);
 
-  public static final DirectionProperty INPUT_FACING = DirectionProperty.create("input",Direction.values());
+  //public static final DirectionProperty INPUT_FACING = DirectionProperty.create("input",Direction.values());
 
-  public static final DirectionProperty OUTPUT_FACING = DirectionProperty.create("output",Direction.values());
+  //public static final DirectionProperty OUTPUT_FACING = DirectionProperty.create("output",Direction.values());
 
   private final MeterType meterType;
 
@@ -49,7 +49,7 @@ public class BlockEnergyMeter extends Block {
             .hardnessAndResistance(3.5F));
 
     this.meterType = meterType;
-    this.setDefaultState(this.stateContainer.getBaseState().with(PROP_FACING, Direction.NORTH).with(INPUT_FACING,Direction.WEST).with(OUTPUT_FACING, Direction.EAST));
+    this.setDefaultState(this.stateContainer.getBaseState().with(PROP_FACING, Direction.NORTH));//.with(INPUT_FACING,Direction.WEST).with(OUTPUT_FACING, Direction.EAST));
   }
 
   @Nullable
@@ -93,8 +93,8 @@ public class BlockEnergyMeter extends Block {
   @Override
   protected void fillStateContainer(Builder<Block, BlockState> builder) {
     builder.add(PROP_FACING);
-    builder.add(INPUT_FACING);
-    builder.add(OUTPUT_FACING);
+    //builder.add(INPUT_FACING);
+    //builder.add(OUTPUT_FACING);
   }
 
   public MeterType getMeterType() {
