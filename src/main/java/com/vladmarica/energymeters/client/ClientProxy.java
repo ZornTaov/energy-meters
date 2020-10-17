@@ -87,7 +87,7 @@ public class ClientProxy extends CommonProxy {
         ResourceLocation spriteLocation = quad.getSprite().getName();
         if (!spriteLocation.getPath().equals("missingno") && !spriteMap.containsKey(spriteLocation)) {
           spriteMap.put(spriteLocation, quad.getSprite());
-          EnergyMetersMod.LOGGER.debug("Side {} has texture {}", side.getName2(), quad.getSprite());
+          //EnergyMetersMod.LOGGER.debug("Side {} has texture {}", side.getName2(), quad.getSprite());
         }
 
         cubeQuadMap.put(side, quad);

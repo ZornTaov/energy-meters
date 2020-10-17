@@ -53,7 +53,7 @@ public class BlockEnergyMeter extends Block {
   @Nullable
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileEntityEnergyMeterFE();
+    return TileEntityTypes.get(this.meterType).create();
   }
 
   @Override

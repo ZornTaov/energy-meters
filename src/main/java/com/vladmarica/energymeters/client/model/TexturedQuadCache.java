@@ -21,12 +21,12 @@ public class TexturedQuadCache {
   public BakedQuadRetextured getBakedQuad(Direction side, ResourceLocation texture) {
     // Check cache first
     if (this.texturedQuadCache.get(side).containsKey(texture)) {
-      EnergyMetersMod.LOGGER.debug("TexturedQuadCache hit for {}-{}", side.getName2(), texture);
+      //EnergyMetersMod.LOGGER.debug("TexturedQuadCache hit for {}-{}", side.getName2(), texture);
       return this.texturedQuadCache.get(side).get(texture);
     }
 
     // In the cache of cache miss, build and store the requested retextured quad
-    EnergyMetersMod.LOGGER.debug("TexturedQuadCache miss for {}-{}", side.getName2(), texture);
+    //EnergyMetersMod.LOGGER.debug("TexturedQuadCache miss for {}-{}", side.getName2(), texture);
 
     BakedQuadRetextured retexturedQuad = buildRetexturedQuad(side, texture);
     this.texturedQuadCache.get(side).put(texture, retexturedQuad);
