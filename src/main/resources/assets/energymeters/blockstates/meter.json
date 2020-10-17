@@ -1,14 +1,8 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "energymeters:block/meter"
-  },
   "variants": {
-    "facing": {
-      "north": {},
-      "south": {},
-      "west": {},
-      "east": {}
-    }
+    "facing=north": { "model": "energymeters:block/meter" },
+    "facing=south": { "model": "energymeters:block/meter" },
+    "facing=west": { "model": "energymeters:block/meter" },
+    "facing=east": { "model": "energymeters:block/meter" }
   }
 }
