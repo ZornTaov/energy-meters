@@ -73,11 +73,11 @@ public abstract class EnergyType {
   public abstract boolean isLimitable();
 
   public static class EnergyAlias {
-    private EnergyType type;
-    private int index;
-    private String displayName;
-    private String description;
-    private Supplier<Boolean> isAvailableSupplier;
+    private final EnergyType type;
+    private final int index;
+    private final String displayName;
+    private final String description;
+    private final Supplier<Boolean> isAvailableSupplier;
 
     EnergyAlias(EnergyType type, int index, String displayName, String description, Supplier<Boolean> isAvailableSupplier) {
       this.type = type;

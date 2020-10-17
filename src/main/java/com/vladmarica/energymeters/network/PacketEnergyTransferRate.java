@@ -4,6 +4,7 @@ import com.vladmarica.energymeters.EnergyMetersMod;
 import com.vladmarica.energymeters.tile.TileEntityEnergyMeterBase;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -38,14 +39,14 @@ public class PacketEnergyTransferRate implements IPacket {
 
   @Override
   public void handle(Supplier<Context> ctx) {
-    ctx.get().enqueueWork(() -> {
-      DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-        World world = Minecraft.getInstance().world;
-        if (!world.isBlockLoaded(pos)) {
+    ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+      final ServerPlayerEntity sender = ctx.get().getSender();
+      if (sender != null ) {
+        if (!sender.world.chunkExists(pos.getX() >> 4, pos.getZ() >> 4)) {
           return;
         }
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = sender.world.getTileEntity(pos);
         if (tile instanceof TileEntityEnergyMeterBase) {
           TileEntityEnergyMeterBase energyMeterTile = (TileEntityEnergyMeterBase) tile;
           energyMeterTile.setTransferRate(rate);
@@ -53,8 +54,8 @@ public class PacketEnergyTransferRate implements IPacket {
         } else {
           EnergyMetersMod.LOGGER.error("Recieved PacketEnergyTransferRate for position with no TE: {}", pos);
         }
-      });
-    });
+      }
+    }));
     ctx.get().setPacketHandled(true);
   }
 }

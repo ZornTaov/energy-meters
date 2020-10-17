@@ -7,6 +7,8 @@ import com.vladmarica.energymeters.energy.EnergyTypes;
 import com.vladmarica.energymeters.tile.TileEntityEnergyMeterBase;
 import com.vladmarica.energymeters.tile.TileEntityEnergyMeterFE;
 import com.vladmarica.energymeters.tile.TileEntityTypes;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,10 +37,6 @@ public class BlockEnergyMeter extends Block {
 
   public static final DirectionProperty PROP_FACING = DirectionProperty.create("facing", Plane.HORIZONTAL);
 
-  //public static final DirectionProperty INPUT_FACING = DirectionProperty.create("input",Direction.values());
-
-  //public static final DirectionProperty OUTPUT_FACING = DirectionProperty.create("output",Direction.values());
-
   private final MeterType meterType;
 
   public BlockEnergyMeter(MeterType meterType) {
@@ -64,8 +62,9 @@ public class BlockEnergyMeter extends Block {
   }
 
   @Override
-  public void neighborChanged(BlockState state, World world, BlockPos pos,
-      Block block, BlockPos fromPos, boolean isMoving) {
+  @SuppressWarnings("deprecation")
+  public void neighborChanged(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos,
+                              @Nonnull Block block, @Nonnull BlockPos fromPos, boolean isMoving) {
     super.neighborChanged(state, world, pos, block, fromPos, isMoving);
 
     TileEntityEnergyMeterBase tile = (TileEntityEnergyMeterBase) world.getTileEntity(pos);
@@ -74,9 +73,11 @@ public class BlockEnergyMeter extends Block {
     }
   }
 
+  @Nonnull
   @Override
-  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos,
-      PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+  @SuppressWarnings("deprecation")
+  public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos,
+                                           @Nonnull PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
     return EnergyMetersMod.proxy.handleEnergyBlockActivation(world, pos, player);
   }
 
@@ -93,8 +94,6 @@ public class BlockEnergyMeter extends Block {
   @Override
   protected void fillStateContainer(Builder<Block, BlockState> builder) {
     builder.add(PROP_FACING);
-    //builder.add(INPUT_FACING);
-    //builder.add(OUTPUT_FACING);
   }
 
   public MeterType getMeterType() {

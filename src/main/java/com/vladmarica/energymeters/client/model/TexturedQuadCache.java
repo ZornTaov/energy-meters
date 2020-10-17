@@ -4,7 +4,6 @@ import com.vladmarica.energymeters.EnergyMetersMod;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.renderer.model.BakedQuad;
-import com.vladmarica.energymeters.client.model.BakedQuadRetextured;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +16,7 @@ public class TexturedQuadCache {
 
   private Map<ResourceLocation, TextureAtlasSprite> spriteMap;
   private Map<Direction, BakedQuad> cubeQuadMap;
-  private Map<Direction, Map<ResourceLocation, BakedQuadRetextured>> texturedQuadCache = new HashMap<>();
+  private final Map<Direction, Map<ResourceLocation, BakedQuadRetextured>> texturedQuadCache = new HashMap<>();
 
   public BakedQuadRetextured getBakedQuad(Direction side, ResourceLocation texture) {
     // Check cache first

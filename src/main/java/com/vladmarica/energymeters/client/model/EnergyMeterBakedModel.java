@@ -104,6 +104,7 @@ public class EnergyMeterBakedModel implements IDynamicBakedModel {
     return this.originalModel.getParticleTexture(EmptyModelData.INSTANCE);
   }
 
+  @SuppressWarnings("NullableProblems")
   @Nullable
   @Override
   public ItemOverrideList getOverrides() {

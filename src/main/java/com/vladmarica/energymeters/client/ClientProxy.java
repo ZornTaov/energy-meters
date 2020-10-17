@@ -3,7 +3,6 @@ package com.vladmarica.energymeters.client;
 import com.google.common.collect.Iterators;
 import com.vladmarica.energymeters.CommonProxy;
 import com.vladmarica.energymeters.EnergyMetersMod;
-import com.vladmarica.energymeters.Registration;
 import com.vladmarica.energymeters.block.BlockEnergyMeter;
 import com.vladmarica.energymeters.block.Blocks;
 import com.vladmarica.energymeters.client.gui.EnergyMeterScreen;
@@ -31,8 +30,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -67,10 +64,6 @@ public class ClientProxy extends CommonProxy {
   }
 
   @SubscribeEvent
-  public static void registerSpecialModels(final ModelRegistryEvent registryEvent) {
-    ModelLoader.addSpecialModel(new ResourceLocation(EnergyMetersMod.MODID, "block/meter"));
-  }
-  @SubscribeEvent
   public void onModelBaking(ModelBakeEvent event) {
     Map<Direction, BakedQuad> cubeQuadMap = new HashMap<>();
     Map<ResourceLocation, TextureAtlasSprite> spriteMap = new HashMap<>();
@@ -81,7 +74,6 @@ public class ClientProxy extends CommonProxy {
     TexturedQuadCache.INSTANCE.setCubeQuadMap(cubeQuadMap);
     TexturedQuadCache.INSTANCE.setTextureMap(spriteMap);
   }
-
   private static void overrideModel(ModelBakeEvent event, BlockEnergyMeter block, Map<Direction, BakedQuad> cubeQuadMap, Map<ResourceLocation, TextureAtlasSprite> spriteMap) {
     for (BlockState state : block.getStateContainer().getValidStates()) {
       ModelResourceLocation modelLocation = BlockModelShapes.getModelLocation(state);

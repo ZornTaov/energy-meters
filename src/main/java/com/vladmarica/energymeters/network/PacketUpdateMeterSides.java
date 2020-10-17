@@ -12,11 +12,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class PacketUpdateMeterSides implements IPacket {
-  private BlockPos pos;
+  private final BlockPos pos;
   @Nullable
-  private Direction inputSide;
+  private final Direction inputSide;
   @Nullable
-  private Direction outputSide;
+  private final Direction outputSide;
 
   public PacketUpdateMeterSides(PacketBuffer buffer) {
     this.pos = BufferUtil.readBlockPos(buffer);
@@ -44,7 +44,7 @@ public class PacketUpdateMeterSides implements IPacket {
     final ServerPlayerEntity sender = ctx.get().getSender();
     if (sender != null) {
       ctx.get().enqueueWork(() -> {
-        if (!sender.world.isBlockLoaded(pos)) {
+        if (!sender.world.chunkExists(pos.getX() >> 4, pos.getZ() >> 4)) {
           EnergyMetersMod.LOGGER.error("Recieved PacketUpdateMeterSides for unloaded position {}", pos);
           return;
         }

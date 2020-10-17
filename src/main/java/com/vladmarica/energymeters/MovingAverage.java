@@ -5,8 +5,8 @@ import java.util.LinkedList;
 public class MovingAverage {
   private long sum = 0;
   private int count = 0;
-  private int maxCount;
-  private LinkedList<Long> values;
+  private final int maxCount;
+  private final LinkedList<Long> values;
 
   public MovingAverage(int maxCount) {
     if (maxCount < 1) {

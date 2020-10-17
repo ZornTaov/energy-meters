@@ -7,18 +7,18 @@ import net.minecraft.util.ResourceLocation;
 public class Sprite {
   private static final int DEFAULT_WIDTH = 16;
   private static final int DEFAULT_HEIGHT = 16;
-  private static final int SPRITEMAP_SIZE = 16;
+  private static final int SPRITE_MAP_SIZE = 16;
 
-  private ResourceLocation texture;
-  private int index;
-  private int textureX;
-  private int textureY;
+  private final ResourceLocation texture;
+  private final int index;
+  private final int textureX;
+  private final int textureY;
 
   public Sprite(ResourceLocation texture, int index) {
     this.texture = texture;
     this.index = index;
-    this.textureX = this.index % SPRITEMAP_SIZE * DEFAULT_WIDTH;
-    this.textureY = this.index / SPRITEMAP_SIZE * DEFAULT_HEIGHT;
+    this.textureX = this.index % SPRITE_MAP_SIZE * DEFAULT_WIDTH;
+    this.textureY = this.index / SPRITE_MAP_SIZE * DEFAULT_HEIGHT;
   }
 
   public void render(MatrixStack matrixStack, Screen gui, int x, int y) {

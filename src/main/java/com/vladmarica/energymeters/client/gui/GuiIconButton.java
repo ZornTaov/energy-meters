@@ -8,6 +8,8 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.Button.IPressable;
 import net.minecraft.util.text.StringTextComponent;
 
+import javax.annotation.Nonnull;
+
 public class GuiIconButton extends Button {
   public static final int SIZE = 20;
 
@@ -19,7 +21,7 @@ public class GuiIconButton extends Button {
   }
 
   @Override
-  public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+  public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
     super.render(matrixStack, mouseX, mouseY, partialTicks);
     if (icon != null) {
       icon.render(matrixStack, Minecraft.getInstance().currentScreen, this.x + 2, this.y + 2);

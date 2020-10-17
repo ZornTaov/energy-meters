@@ -11,9 +11,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class PacketUpdateMeterConfig implements IPacket {
-  private BlockPos pos;
-  private EnumRedstoneControlState redstoneControlState;
-  private int energyAliasIndex;
+  private final BlockPos pos;
+  private final EnumRedstoneControlState redstoneControlState;
+  private final int energyAliasIndex;
 
   public PacketUpdateMeterConfig(PacketBuffer buffer) {
     this.pos = BufferUtil.readBlockPos(buffer);
@@ -39,7 +39,7 @@ public class PacketUpdateMeterConfig implements IPacket {
     final ServerPlayerEntity sender = ctx.get().getSender();
     if (sender != null) {
       ctx.get().enqueueWork(() -> {
-        if (!sender.world.isBlockLoaded(pos)) {
+        if (!sender.world.chunkExists(pos.getX() >> 4, pos.getZ() >> 4)) {
           EnergyMetersMod.LOGGER.error("Recieved PacketUpdateMeterConfig for unloaded position {}", pos);
           return;
         }

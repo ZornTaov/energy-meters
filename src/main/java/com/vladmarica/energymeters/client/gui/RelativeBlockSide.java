@@ -8,7 +8,7 @@ public enum RelativeBlockSide {
   LEFT("Left"),
   RIGHT("Right");
 
-  private String label;
+  private final String label;
 
   RelativeBlockSide(String label) {
     this.label = label;

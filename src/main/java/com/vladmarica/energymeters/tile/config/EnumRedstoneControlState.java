@@ -12,8 +12,8 @@ public enum EnumRedstoneControlState implements IConfigEnum {
   INVERTED("Inverted", Function.identity()),
   IGNORED("Ignored", powered -> true);
 
-  private String title;
-  private Function<Boolean, Boolean> checkEnabledFunction;
+  private final String title;
+  private final Function<Boolean, Boolean> checkEnabledFunction;
 
   EnumRedstoneControlState(String title, Function<Boolean, Boolean> checkEnabledFunction) {
     this.title = title;

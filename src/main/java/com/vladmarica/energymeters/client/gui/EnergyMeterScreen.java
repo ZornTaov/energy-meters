@@ -3,7 +3,6 @@ package com.vladmarica.energymeters.client.gui;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.vladmarica.energymeters.EnergyMetersMod;
 import com.vladmarica.energymeters.Util;
 import com.vladmarica.energymeters.block.BlockEnergyMeter;
@@ -37,7 +36,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
-//import net.minecraftforge.fml.client.config.GuiButtonExt;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class EnergyMeterScreen extends Screen implements IPressable {
@@ -66,14 +66,14 @@ public class EnergyMeterScreen extends Screen implements IPressable {
   private GuiButtonConfigEnum<EnumRedstoneControlState> redstoneControlButton;
   private Button setRateLimitButton;
 
-  private TileEntityEnergyMeterBase tile;
+  private final TileEntityEnergyMeterBase tile;
   private BiMap<RelativeBlockSide, Direction> sideToFaceMap;
   private Map<RelativeBlockSide, GuiButtonSideConfig> sideToButtonMap = new HashMap<>();
 
-  private ResourceLocation sideTexture;
-  private ResourceLocation inputTexture;
-  private ResourceLocation outputTexture;
-  private ResourceLocation screenTexture;
+  private final ResourceLocation sideTexture;
+  private final ResourceLocation inputTexture;
+  private final ResourceLocation outputTexture;
+  private final ResourceLocation screenTexture;
 
   private TextFieldWidget rateLimitTextField;
   private boolean isEditingLimit = false;
@@ -210,7 +210,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
 
 
   @Override
-  public void render(MatrixStack mx, int mouseX, int mouseY, float partialTicks) {
+  public void render(@Nonnull MatrixStack mx, int mouseX, int mouseY, float partialTicks) {
     this.renderBackground(mx);
 
 
@@ -248,7 +248,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
 
     this.updateConfigButtonTextures();
     for (GuiButtonSideConfig sideConfigButton : this.sideToButtonMap.values()) {
-      GlStateManager.color4f(1, 1, 1, 1);
+      //GlStateManager.color4f(1, 1, 1, 1);
       sideConfigButton.render(mx, mouseX, mouseY, partialTicks);
     }
 
@@ -276,6 +276,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
         if (this.sideToFaceMap.get(sideConfigButton.getSide()) == tile.getOutputSide()) {
           lines.add(TextFormatting.GRAY + "Output");
         }
+        //TODO: Tooltip
         //this.renderTooltip(mx, lines, mouseX, mouseY);
         break;
       }
@@ -283,6 +284,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
 
     for (Widget button : this.buttons) {
       if (button instanceof IHasTooltip && button.isMouseOver(mouseX, mouseY)) {
+        //TODO: Tooltip
         //this.renderTooltip(mx, ((IHasTooltip) button).getTooltipLines(), mouseX, mouseY);
       }
     }
@@ -295,7 +297,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
       if (!this.tile.getEnergyType().isLimitable()) {
         lines.add(TextFormatting.RED + this.tile.getEnergyType().getName() + " meters cannot be limited");
       }
-
+      //TODO: Tooltip
       //this.renderTooltip(lines,  mouseX, mouseY);
     }
   }
@@ -307,7 +309,7 @@ public class EnergyMeterScreen extends Screen implements IPressable {
   }
 
   @Override
-  public void onPress(Button button) {
+  public void onPress(@Nonnull Button button) {
 
     boolean sendUpdatePacket = false;
 

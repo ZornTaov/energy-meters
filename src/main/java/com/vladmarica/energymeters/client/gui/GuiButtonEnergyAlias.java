@@ -8,8 +8,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-
 public class GuiButtonEnergyAlias extends Button implements IHasTooltip {
   private static final int SIZE = 20;
 

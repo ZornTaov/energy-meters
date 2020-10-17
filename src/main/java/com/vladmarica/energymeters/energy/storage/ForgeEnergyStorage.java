@@ -5,8 +5,8 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class ForgeEnergyStorage implements IEnergyStorage {
-  private IEnergyMeter meter;
-  private Direction side;
+  private final IEnergyMeter meter;
+  private final Direction side;
 
   public ForgeEnergyStorage(IEnergyMeter meter, Direction side) {
     this.meter = meter;

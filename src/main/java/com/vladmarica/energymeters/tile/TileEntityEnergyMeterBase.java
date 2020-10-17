@@ -6,6 +6,7 @@ import com.vladmarica.energymeters.Util;
 import com.vladmarica.energymeters.block.BlockEnergyMeter;
 import com.vladmarica.energymeters.block.BlockEnergyMeter.MeterType;
 import com.vladmarica.energymeters.block.Blocks;
+import com.vladmarica.energymeters.client.model.EnergyMeterBakedModel;
 import com.vladmarica.energymeters.energy.EnergyType;
 import com.vladmarica.energymeters.energy.EnergyType.EnergyAlias;
 import com.vladmarica.energymeters.energy.IEnergyMeter;
@@ -113,7 +114,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
   }
 
   @Override
-  public void read(BlockState state, CompoundNBT tag) {
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT tag) {
     super.read(state, tag);
     this.inputSide = BufferUtil.decodeNullableFace(tag.getByte(NBT_INPUT_SIDE_KEY));
     this.outputSide = BufferUtil.decodeNullableFace(tag.getByte(NBT_OUTPUT_SIDE_KEY));
@@ -126,8 +127,9 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
     this.loadedFromDisk = true;
   }
 
+  @Nonnull
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
     CompoundNBT tag = super.write(compound);
     tag.putByte(NBT_INPUT_SIDE_KEY, BufferUtil.encodeNullableFace(this.inputSide));
     tag.putByte(NBT_OUTPUT_SIDE_KEY, BufferUtil.encodeNullableFace(this.outputSide));
@@ -138,6 +140,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
     return tag;
   }
 
+  @Nonnull
   @Override
   public CompoundNBT getUpdateTag() {
     CompoundNBT tag = super.getUpdateTag();
