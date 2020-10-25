@@ -4,8 +4,17 @@ import com.vladmarica.energymeters.EnergyMetersMod;
 import com.vladmarica.energymeters.block.BlockEnergyMeter.MeterType;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = EnergyMetersMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TextureLocations {
   private static final Map<MeterType, ResourceLocation> SIDE_TEXTURES = new HashMap<>();
   private static final Map<MeterType, ResourceLocation> INPUT_TEXTURES = new HashMap<>();
@@ -23,6 +32,24 @@ public class TextureLocations {
     }
   }
 
+  @SubscribeEvent
+  public static void onTextureStitchEvent(TextureStitchEvent.Pre event) {
+    if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) {
+      for (ResourceLocation texture: SIDE_TEXTURES.values()) {
+        event.addSprite(texture);
+      }
+      for (ResourceLocation texture: INPUT_TEXTURES.values()) {
+        event.addSprite(texture);
+      }
+      for (ResourceLocation texture: OUTPUT_TEXTURES.values()) {
+        event.addSprite(texture);
+      }
+      for (ResourceLocation texture: SCREEN_TEXTURES.values()) {
+        event.addSprite(texture);
+      }
+
+    }
+  }
   public static ResourceLocation getSideTexture(MeterType type) {
     return SIDE_TEXTURES.get(type);
   }

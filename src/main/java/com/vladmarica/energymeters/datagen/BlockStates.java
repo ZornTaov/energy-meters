@@ -26,7 +26,7 @@ public class BlockStates extends BlockStateProvider {
     }
     @Override
     protected void registerStatesAndModels() {
-        this.simpleBlock(Blocks.ENERGY_METER_FE);
+        //this.horizontalBlock(Blocks.ENERGY_METER_FE);
         //this.getVariantBuilder(Blocks.ENERGY_METER_FE).partialState().with();
     }
 
