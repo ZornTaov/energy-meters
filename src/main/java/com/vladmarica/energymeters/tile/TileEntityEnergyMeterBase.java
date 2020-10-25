@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.network.PacketDistributor;
 
@@ -187,7 +188,9 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet){
     this.handleUpdateTag(this.world.getBlockState(pos), packet.getNbtCompound());
-    // this.getWorld().markBlockRangeForRenderUpdate(this.pos, this.pos);
+    ModelDataManager.requestModelDataRefresh(this);
+    this.getWorld().markBlockRangeForRenderUpdate(this.pos, this.getBlockState(), this.getBlockState());
+
   }
 
   /**
@@ -300,7 +303,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
 
   protected void notifyUpdate() {
     BlockState currentBlockState = this.world.getBlockState(this.pos);
-    this.world.notifyBlockUpdate(this.pos, currentBlockState, currentBlockState, 3);
+    this.world.notifyBlockUpdate(this.pos, currentBlockState, currentBlockState, Constants.BlockFlags.DEFAULT);
     this.world.notifyNeighborsOfStateChange(this.pos, Blocks.ENERGY_METER_FE);
   }
 
@@ -399,11 +402,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
     this.checkConnections();
     this.markDirty();
 
-    ModelDataManager.requestModelDataRefresh(this);
-
-    BlockState state = this.world.getBlockState(this.pos);
-    this.world.notifyBlockUpdate(pos, state, state, 3);
-    this.world.notifyNeighborsOfStateChange(this.pos, Blocks.ENERGY_METER_FE);
+    notifyUpdate();
   }
 
   public void handleConfigUpdateRequest(EnumRedstoneControlState redstoneControlState, int energyAliasIndex) {
@@ -420,9 +419,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
 
     this.markDirty();
 
-    BlockState state = this.world.getBlockState(this.pos);
-    this.world.notifyBlockUpdate(pos, state, state, 3);
-    this.world.notifyNeighborsOfStateChange(this.pos, Blocks.ENERGY_METER_FE);
+    notifyUpdate();
   }
 
   public void handleRateLimitChangeRequest(int newRateLimit) {
@@ -439,9 +436,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
     this.checkConnections();
     this.markDirty();
 
-    BlockState state = this.world.getBlockState(this.pos);
-    this.world.notifyBlockUpdate(pos, state, state, 3);
-    this.world.notifyNeighborsOfStateChange(this.pos, Blocks.ENERGY_METER_FE);
+    notifyUpdate();
   }
 
   public boolean isFullyConnected() {
