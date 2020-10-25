@@ -399,7 +399,7 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
     this.checkConnections();
     this.markDirty();
 
-    //ModelDataManager.requestModelDataRefresh(this);
+    ModelDataManager.requestModelDataRefresh(this);
 
     BlockState state = this.world.getBlockState(this.pos);
     this.world.notifyBlockUpdate(pos, state, state, 3);
@@ -448,6 +448,14 @@ public abstract class TileEntityEnergyMeterBase extends TileEntity implements IT
     return this.fullyConnected;
   }
 
+  @OnlyIn(Dist.CLIENT)
+  @Nonnull
+  @Override
+  public IModelData getModelData() {
+    return new ModelDataMap.Builder()
+            .withInitial(EnergyMeterBakedModel.MODEL_PROP_INPUT_SIDE, this.inputSide)
+            .withInitial(EnergyMeterBakedModel.MODEL_PROP_OUTPUT_SIDE, this.outputSide).build();
+  }
 
   // IEnergyMeter implementation
 

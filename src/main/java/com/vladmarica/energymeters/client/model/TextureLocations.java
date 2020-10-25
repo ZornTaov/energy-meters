@@ -33,6 +33,11 @@ public class TextureLocations {
   }
 
   @SubscribeEvent
+  public static void registerSpecialModels(final ModelRegistryEvent registryEvent) {
+    ModelLoader.addSpecialModel(new ResourceLocation(EnergyMetersMod.MODID, "block/meter"));
+  }
+
+  @SubscribeEvent
   public static void onTextureStitchEvent(TextureStitchEvent.Pre event) {
     if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) {
       for (ResourceLocation texture: SIDE_TEXTURES.values()) {
